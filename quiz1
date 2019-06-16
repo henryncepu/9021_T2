@@ -1,0 +1,72 @@
+
+
+import sys
+from random import seed, randrange
+
+try:
+    arg_for_seed, upper_bound = (abs(int(x)) + 1 for x in input('Enter two integers: ').split())
+except ValueError:
+    print('Incorrect input, giving up.')
+    sys.exit()
+
+seed(arg_for_seed)
+mapping = {}
+List = []
+for i in range(1, upper_bound):
+    r = randrange(-upper_bound // 2, upper_bound)
+    if r > 0:
+        mapping[i] = r
+print('\nThe generated mapping is:')
+for key in mapping.keys():
+    List.append(key)
+print('  ', mapping)
+
+mapping_as_a_list = []
+mapping_as_a_list = [None] * upper_bound
+
+nonkeys = []
+for e in range(1, upper_bound):
+    if e not in List:
+        nonkeys.append(e)
+
+# INSERT YOUR CODE HERE
+for key in mapping.keys():
+    mapping_as_a_list[key] = mapping[key]
+one_to_one_part_of_mapping = {}
+two_mapping= {}
+# for item in mapping.items():#用dict.items()返回的是元组（x,y）
+dict = {}
+List_dict = []
+
+# if dict[value[1]]==1:
+#     print('dict',dict)
+# print ('dict',dict)
+for key, value in mapping.items():
+    dict[value] = dict.get(value, 0) + 1
+# print('dict',dict)
+for value in dict.items():
+    # print('va',value)
+    if value[1] == 1:
+        one_to_one_part_of_mapping[list(mapping)[list(mapping.values()).index(value[0])]] /*
+        = mapping[list(mapping)[list(mapping.values()).index(value[0])]]
+    elif value[1] == 2:
+        print('haha')
+        two_mapping[list(mapping)[list(mapping.values()).index(value[0])]] /*
+        = mapping[list(mapping)[list(mapping.values()).index(value[0])]]
+
+print()
+print(f'The mappings\'s so-called "keys" make up a set whose number of elements is {(len(List))}.')
+print('\nThe list of integers between 1 and', upper_bound - 1, 'that are not keys of the mapping is:')
+print('  ', nonkeys)
+print('\nRepresented as a list, the mapping is:')
+print('  ', mapping_as_a_list)
+# Recreating the dictionary, inserting keys from smallest to largest,
+# to make sure the dictionary is printed out with keys from smallest to largest.
+one_to_one_part_of_mapping = {key: one_to_one_part_of_mapping[key]
+                              for key in sorted(one_to_one_part_of_mapping)
+                              }
+two_mapping = {key: two_mapping[key]
+                              for key in sorted(two_mapping)}
+print('\nThe one-to-one part of the mapping is:')
+print('  ', one_to_one_part_of_mapping)
+print('  ',two_mapping)
