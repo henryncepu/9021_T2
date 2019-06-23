@@ -1,0 +1,14 @@
+def f(*x):# x is the tuple of all arguments passed to f()
+    # * 是将所有元素 都转为元组进行操作
+    return x*2
+#print(()*2)
+print(f(),'1')#元组是（）,与上面的相等
+#print((2,3,4)*2)
+print(f(2,3,4),'2')#元组是（2,3,4）
+#print((0,)*2)
+print(f(0),'3')#元组是(0,)
+#print((f(0),)*2)
+print(f((0, 0)),'4')#元组是((0, 0))
+#print(*(0,0))在元组外面加星号就把元组又变回了元素
+print(*f(0),'5')
+print(f(f(f(0))),'6')
