@@ -1,0 +1,65 @@
+# Written by henry
+
+
+import sys
+from random import seed, randrange
+from pprint import pprint
+from collections import Counter, defaultdict
+
+
+try:
+    arg_for_seed, upper_bound = (abs(int(x)) + 1 for x in input('Enter two integers: ').split())
+except ValueError:
+    print('Incorrect input, giving up.')
+    sys.exit()
+
+seed(arg_for_seed)
+mapping = {}
+for i in range(1, upper_bound):
+    r = randrange(-upper_bound // 8, upper_bound)
+    if r > 0:
+        mapping[i] = r
+print('\nThe generated mapping is:')
+print('  ', mapping)
+# sorted() can take as argument a list, a dictionary, a set...
+keys = sorted(mapping.keys())
+print('\nThe keys are, from smallest to largest: ')
+print('  ', keys)
+cycles = []
+reversed_dict_per_length = {}
+
+# INSERT YOUR CODE HERE
+set_key = set(keys)#必须放在循环外
+next_key = keys
+exit_cycle=[]
+for k in keys:
+    if k in exit_cycle:#如果k已经在循环的列表里了，则找下一个k值
+        continue
+    List_new = []#必须得放在for 循环里边
+    next_key = k
+    k_new = keys.copy()#不用keys的镜像就会把原本的keys给修改了，使得后面在调用就不对了
+    while next_key in k_new:
+        List_new.append(next_key)#每次都会把keys里的属于循环的key去除，放入List_new里面存起来
+        k_new.remove(next_key)
+        next_key = mapping[next_key]
+        List_store=[]
+        if next_key == k:
+            cycles.append(List_new)
+
+            exit_cycle.extend(List_new)#s1|s2只能用在集合中
+            #exit_cycle +=List_new第二种把两个列表加在一起
+            #exit_cycle[len(exit_cycle):len(exit_cycle)]=len(List_new)#在这里不能用，下次试试别的地方
+
+di = defaultdict(list)
+for i in mapping:
+    #print((i, mapping[i])[0])
+    di[(i, mapping[i])[1]].append((i, mapping[i])[0])
+for x in di:
+    #print(x,di[x],'hh')
+    e_di = reversed_dict_per_length.setdefault(len(di[x]),dict())
+    e_di.update([(x,di[x])])
+print('\nProperly ordered, the cycles given by the mapping are: ')
+print('  ', cycles)
+print('\nThe (triply ordered) reversed dictionary per lengths is: ')
+pprint(reversed_dict_per_length)
+
