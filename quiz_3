@@ -1,0 +1,109 @@
+# Author: henry_wang
+# Author: henry_wang
+import sys
+from collections import defaultdict
+
+on = '\u26aa'#白点
+off = '\u26ab'#黑点
+code = input('Enter a non-strictly negative integer: ').strip()
+try:
+    if code[0] == '-':
+        raise ValueError
+    int(code)
+except ValueError:
+    print('Incorrect input, giving up.')
+    sys.exit()
+nb_of_leading_zeroes = 0
+for i in range(len(code) - 1):
+    if code[i] == '0':
+        nb_of_leading_zeroes += 1
+    else:
+        break#  不加这段关于非零数字前边有几个0 的判断，会使得结果中只有1个0  如000256应是000400，不加就是0400
+
+print("Keeping leading 0's, if any, in base 8,", code, 'reads as',
+      '0' * nb_of_leading_zeroes + f'{int(code):o}.'
+     )
+print()
+# 矩阵抽象化，用字典表示矩阵，
+# 0->off, 1->on; 默认为0
+matrix = defaultdict(int)
+t =reversed('0' * nb_of_leading_zeroes + f'{int(code):o}')
+L_ma=[]
+def flip_switch(position):
+    L_ma.append(position)
+    matrix[position] = 0 ** matrix[position]
+
+def direction0(start):
+    if start:
+        next = (start[0], start[1]+1)
+    else:
+        return None
+    return next
+def direction1(start):
+    if start:
+        next = (start[0]+1, start[1]+1)
+    else:
+        return None
+    return next
+def direction2(start):
+    if start:
+        next = (start[0]+1, start[1])
+    else:
+        return None
+    return next
+def direction3(start):
+    if start:
+        next = (start[0]+1, start[1]-1)
+    else:
+        return None
+    return next
+def direction4(start):
+    if start:
+        next = (start[0], start[1]-1)
+    else:
+        return None
+    return next
+def direction5(start):
+    if start:
+        next = (start[0]-1, start[1]-1)
+    else:
+        return None
+    return next
+def direction6(start):
+    if start:
+        next = (start[0]-1, start[1])
+    else:
+        return None
+    return next
+def direction7(start):
+    if start:
+        next = (start[0]-1, start[1]+1)
+    else:
+        return None
+    return next
+
+# 初始化原点
+start_point = (0, 0)
+operations = {'0': direction0,'1': direction1,'2': direction2,'3': direction3,'4': direction4, '5': direction5,'6': direction6,'7': direction7#通过字典直接调用函数
+}
+flip_switch(start_point)# show the matrix
+converter = {1: on, 0: off}
+for i in t:
+    start_point = operations[i](start_point)
+    flip_switch(start_point)
+row_x=[]
+column_y=[]
+for i in matrix.items():
+    if i[1]==1:#通过i[1]来鉴别是否是第一次
+        row_x.append(i[0][0])
+        column_y.append(i[0][1])
+
+if column_y and row_x:
+    top_, bottom_ = max(column_y), min(column_y)
+    left_, right_ = min(row_x), max(row_x)
+
+    for y in range(max(column_y), min(column_y)-1, -1):#如果由大到小输出y，矩阵就是正正相反
+        for x in range(min(row_x), max(row_x)+1, 1):
+            # print(matrix[(x,y)],'ma[x,y]')
+            print(converter[matrix[(x, y)]], end='')
+        print()
