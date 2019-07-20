@@ -1,0 +1,54 @@
+# Author: henry_wang
+import sys
+
+
+def encode(list_of_integers):
+    if list_of_integers !=[]:
+      List_de = []
+      for ele in range(len(list_of_integers)):
+          string_de_replace = str(bin(list_of_integers[ele])[2:]).replace('1','11').replace('0','00')
+          # print (string_de_replace)
+          List_de.append(string_de_replace)
+      num_list_new = map(lambda x: str(x), List_de)
+      str_de =",".join(num_list_new)
+      str_new = str_de.replace(',','0')
+      return int(str_new,2)
+    else:
+      return None
+    # REPLACE pass ABOVE WITH YOUR CODE
+
+
+def decode(integer):
+    string_input = bin(the_input)[2 :]
+    replace_input = string_input.replace('11','aa').replace('00','bb')
+    split_input = replace_input.split('0')
+    for i in range(len(split_input)):
+        print(split_input[i])
+        if '0' in replace_input or str(split_input[i]).isalpha():
+            List = []
+            for i in range(len(split_input)):
+                ori_input =split_input[i].replace('aa','1').replace('bb','0')
+                t = (int(ori_input,2))
+                List.append(t)
+            return List
+        else :
+            return  None
+    # REPLACE pass ABOVE WITH YOUR CODE
+
+
+# We assume that user input is valid. No need to check
+# for validity, nor to take action in case it is invalid.
+print('Input either a strictly positive integer')
+the_input = eval(input('or a nonempty list of strictly positive integers: '))
+if type(the_input) is int:
+    print('  In base 2,', the_input, 'reads as', bin(the_input)[2 :])
+    decoding = decode(the_input)
+    if decoding is None:
+        print('Incorrect encoding!')
+    else:
+        print('  It encodes: ', decode(the_input))
+else:
+    print('  In base 2,', the_input, 'reads as',
+          f'[{", ".join(bin(e)[2: ] for e in the_input)}]'
+         )
+    print('  It is encoded by', encode(the_input))
